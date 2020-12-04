@@ -5,6 +5,11 @@ import pandas as pd
 from sql_queries import *
 
 
+"""
+The function process the song file
+Extract data from the file,
+and insert those relevant data to song_table and artist_table
+"""
 def process_song_file(cur, filepath):
     # open song file
     df = pd.read_json(filepath, lines=True)
@@ -17,7 +22,11 @@ def process_song_file(cur, filepath):
     artist_data = df[['artist_id','artist_name','artist_location','artist_latitude', 'artist_longitude']].values[0].tolist()
     cur.execute(artist_table_insert, artist_data)
 
-
+"""
+The function process the log file
+Extract data from the file,
+and insert those relevant data to time_table, user_table and songplay_table
+"""
 def process_log_file(cur, filepath):
     # open log file
     df = pd.read_json(filepath, lines=True)
@@ -54,7 +63,11 @@ def process_log_file(cur, filepath):
         songplay_data = (row.ts, row.userId, row.level, songid, artistid, row.sessionId, row.location, row.userAgent)
         cur.execute(songplay_table_insert, songplay_data)
 
-
+"""
+The function process files from directory
+It gets all files and print out the total number of files existed
+And print out the number of files processed when iterating through the files
+"""
 def process_data(cur, conn, filepath, func):
     # get all files matching extension from directory
     all_files = []
@@ -73,7 +86,13 @@ def process_data(cur, conn, filepath, func):
         conn.commit()
         print('{}/{} files processed.'.format(i, num_files))
 
-
+"""
+The main() for etl.py
+Create connection to the database
+Set up cursor
+Process song file and log file by calling process_data function
+Close the connection to the database
+"""
 def main():
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
