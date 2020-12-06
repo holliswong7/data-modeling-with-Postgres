@@ -62,7 +62,7 @@ pip install psycopg2
 ```
 
 ```
-pip install ipykernel, jupyter
+pip install ipykernel jupyter
 ipython kernel install --user --name=venv
 jupyter-notebook
 ```
